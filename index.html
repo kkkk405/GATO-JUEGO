@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>¡Gato de Cumpleaños!</title>
+<link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+
+<div id="confetti-canvas"></div>
+
+<div class="balloon"><img src="assets/icons/globo-rojo.png" alt="globo"></div>
+<div class="balloon"><img src="assets/icons/globo-rojo.png" alt="globo"></div>
+<div class="balloon"><img src="assets/icons/globo-rojo.png" alt="globo"></div>
+<div class="balloon"><img src="assets/icons/globo-rojo.png" alt="globo"></div>
+<div class="balloon"><img src="assets/icons/globo-rojo.png" alt="globo"></div>
+<div class="balloon"><img src="assets/icons/globo-rojo.png" alt="globo"></div>
+<div class="balloon"><img src="assets/icons/globo-rojo.png" alt="globo"></div>
+<div class="balloon"><img src="assets/icons/globo-rojo.png" alt="globo"></div>
+<div class="balloon"><img src="assets/icons/globo-rojo.png" alt="globo"></div>
+<div class="balloon"><img src="assets/icons/globo-rojo.png" alt="globo"></div>
+<div class="balloon"><img src="assets/icons/globo-rojo.png" alt="globo"></div>
+<div class="balloon"><img src="assets/icons/globo-rojo.png" alt="globo"></div>
+<div class="balloon"><img src="assets/icons/globo-rojo.png" alt="globo"></div>
+<div class="balloon"><img src="assets/icons/globo-rojo.png" alt="globo"></div>
+<div class="balloon"><img src="assets/icons/globo-rojo.png" alt="globo"></div>
+<div class="balloon"><img src="assets/icons/globo-rojo.png" alt="globo"></div>
+<div class="balloon"><img src="assets/icons/globo-rojo.png" alt="globo"></div>
+<div class="balloon"><img src="assets/icons/globo-rojo.png" alt="globo"></div>
+<div class="balloon"><img src="assets/icons/globo-rojo.png" alt="globo"></div>
+<div class="balloon"><img src="assets/icons/globo-rojo.png" alt="globo"></div>
+<div class="balloon"><img src="assets/icons/globo-rojo.png" alt="globo"></div>
+<div class="balloon"><img src="assets/icons/globo-rojo.png" alt="globo"></div>
+<div class="balloon"><img src="assets/icons/globo-rojo.png" alt="globo"></div>
+<div class="balloon"><img src="assets/icons/globo-rojo.png" alt="globo"></div>
+<div class="balloon"><img src="assets/icons/globo-rojo.png" alt="globo"></div>
+<div class="balloon"><img src="assets/icons/globo-rojo.png" alt="globo"></div>
+<div class="balloon"><img src="assets/icons/globo-rojo.png" alt="globo"></div>
+<div class="balloon"><img src="assets/icons/globo-rojo.png" alt="globo"></div>
+<div class="balloon"><img src="assets/icons/globo-rojo.png" alt="globo"></div>
+<div class="balloon"><img src="assets/icons/globo-rojo.png" alt="globo"></div>
+<div class="balloon"><img src="assets/icons/globo-rojo.png" alt="globo"></div>
+<div class="balloon"><img src="assets/icons/globo-rojo.png" alt="globo"></div>
+<div class="balloon"><img src="assets/icons/globo-rojo.png" alt="globo"></div>
+<div class="balloon"><img src="assets/icons/globo-rojo.png" alt="globo"></div>
+<div class="balloon"><img src="assets/icons/globo-rojo.png" alt="globo"></div>
+<div class="balloon"><img src="assets/icons/globo-rojo.png" alt="globo"></div>
+<div class="balloon"><img src="assets/icons/globo-rojo.png" alt="globo"></div>
+<div class="balloon"><img src="assets/icons/globo-rojo.png" alt="globo"></div>
+<div class="balloon"><img src="assets/icons/globo-rojo.png" alt="globo"></div>
+<div class="balloon"><img src="assets/icons/globo-rojo.png" alt="globo"></div>
+<div class="balloon"><img src="assets/icons/globo-rojo.png" alt="globo"></div>
+
+<div class="toast" id="toast"><span class="toast-icon" id="toast-icon"></span><span class="toast-text" id="toast-text"></span></div>
+
+<div class="container">
+
+  <!-- Screen 1: Welcome -->
+  <div class="screen active" id="screen-welcome">
+    <div class="birthday-header">
+      <p class="subtitle"> ¡Felíz Cumpleaños Ignacio Cavieres! </p>
+      <h1> Gato sobre ruedas </h1>
+      <p>El clásico juego del gato... ¡pero con vehículos!</p>
+    </div>
+    <button class="btn btn-primary" onclick="showScreen('screen-select')"><img class="icon-svg" src="assets/icons/play.svg"> ¡Jugar!</button>
+  </div>
+
+  <!-- Screen 2: Vehicle & Color selection -->
+  <div class="screen" id="screen-select">
+    <div class="birthday-header">
+      <h1><img class="icon-svg" src="assets/icons/settings.svg"> Personaliza tu juego</h1>
+    </div>
+
+    <div class="selection-title">Modo de juego:</div>
+    <div class="mode-options">
+      <div class="mode-card selected" data-mode="1p" onclick="selectMode(this)">
+        <span class="mode-icon"><img src="assets/icons/single-player.svg"></span>
+        <span>1 Jugador</span>
+      </div>
+      <div class="mode-card" data-mode="2p" onclick="selectMode(this)">
+        <span class="mode-icon"><img src="assets/icons/multi-player.svg"></span>
+        <span>2 Jugadores</span>
+      </div>
+    </div>
+
+    <div class="selection-title">Elige tu vehículo:</div>
+    <div class="vehicle-options">
+      <div class="vehicle-card selected" data-vehicle="moto" onclick="selectVehicle(this)">
+        <img class="vehicle-icon" src="assets/icons/moto-roja.png" alt="Moto">
+        <span>Moto</span>
+      </div>
+      <div class="vehicle-card" data-vehicle="auto" onclick="selectVehicle(this)">
+        <img class="vehicle-icon" src="assets/icons/auto-rojo.png" alt="Auto">
+        <span>Auto</span>
+      </div>
+    </div>
+
+    <div class="color-section">
+      <div class="selection-title" id="color-label">Elige tu color:</div>
+      <div class="color-options" id="color-options"></div>
+      <div class="player-color-label" id="color-hint">Tú eliges primero</div>
+    </div>
+
+    <button class="btn btn-primary" id="btn-start" onclick="startGame()" disabled>¡A jugar!</button>
+  </div>
+
+  <!-- Screen 3: Game -->
+  <div class="screen" id="screen-game">
+    <div class="birthday-header" style="margin-bottom: 10px;">
+      <h1 style="font-size:1.5rem;"> Gato sobre ruedas</h1>
+    </div>
+
+    <div class="game-header">
+      <div class="player-info active" id="p1-info">
+        <div id="p1-vehicle"></div>
+        <div class="name" id="p1-name">Jugador 1</div>
+        <div class="score"><img class="icon-svg" src="assets/icons/trophy.svg"> <span id="p1-score">0</span></div>
+      </div>
+      <div class="vs">VS</div>
+      <div class="player-info" id="p2-info">
+        <div id="p2-vehicle"></div>
+        <div class="name" id="p2-name">Jugador 2</div>
+        <div class="score"><img class="icon-svg" src="assets/icons/trophy.svg"> <span id="p2-score">0</span></div>
+      </div>
+    </div>
+
+    <div class="turn-indicator" id="turn-indicator" style="display: none;">
+      Turno de: <span class="highlight" id="turn-text">Jugador 1</span>
+    </div>
+    <div class="turn-indicator" id="result-text" style="display: none;"></div>
+
+    <div class="board" id="board"></div>
+
+    <div class="game-actions">
+      <button class="btn btn-secondary btn-small" id="btn-reset" onclick="resetBoard()"><img class="icon-svg" src="assets/icons/refresh.svg"> Reiniciar juego</button>
+      <button class="btn btn-secondary btn-small" onclick="backToMenu()"><img class="icon-svg" src="assets/icons/home.svg"> Menú principal</button>
+      <button class="btn btn-ghost btn-small" onclick="toggleAchievementsModal()"><img class="icon-svg" src="assets/icons/medal.svg"> Logros <span id="ach-count">(0/8)</span></button>
+    </div>
+  </div>
+
+  <!-- Achievements Modal -->
+  <div class="modal-overlay" id="achievements-modal" onclick="closeAchievementsModal(event)">
+    <div class="modal-content" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <h2><img class="icon-svg" src="assets/icons/medal.svg"> Logros <span id="ach-count-modal">(0/8)</span></h2>
+        <button class="modal-close" onclick="closeAchievementsModal()">&times;</button>
+      </div>
+      <div class="achievements-panel" id="achievements-panel">
+        <div class="achievement" data-ach="first-win">
+          <span class="icon"><img src="assets/icons/logros/yami-sorprendida.png"></span>
+          <div class="info">
+            <div class="name">y sin WIZAR!!</div>
+            <div class="desc">Gana tu primera partida</div>
+          </div>
+          <span class="badge"><img src="assets/icons/lock.svg"></span>
+        </div>
+        <div class="achievement" data-ach="three-streak">
+          <span class="icon"><img src="assets/icons/logros/duda.png"></span>
+          <div class="info">
+            <div class="name">¿Que significa ambiguo?</div>
+            <div class="desc">Gana 3 partidas seguidas</div>
+          </div>
+          <span class="badge"><img src="assets/icons/lock.svg"></span>
+        </div>
+        <div class="achievement" data-ach="draw">
+          <span class="icon"><img src="assets/icons/logros/pastilla.png"></span>
+          <div class="info">
+            <div class="name">no voy a ir a buscar las pastillas.</div>
+            <div class="desc">Primer empate</div>
+          </div>
+          <span class="badge"><img src="assets/icons/lock.svg"></span>
+        </div>
+        <div class="achievement" data-ach="perfect">
+          <span class="icon"><img src="assets/icons/logros/yami-lentes.png"></span>
+          <div class="info">
+            <div class="name">Este es un juego de logica y deducción</div>
+            <div class="desc">Gana 10 partidas seguidas sin empates</div>
+          </div>
+          <span class="badge"><img src="assets/icons/lock.svg"></span>
+        </div>
+        <div class="achievement" data-ach="comeback">
+          <span class="icon"><img src="assets/icons/logros/galleta.png"></span>
+          <div class="info">
+            <div class="name">tenia un DEA!</div>
+            <div class="desc">Gana después de que el oponente tenga 2 en línea</div>
+          </div>
+          <span class="badge"><img src="assets/icons/lock.svg"></span>
+        </div>
+        <div class="achievement" data-ach="five-wins">
+          <span class="icon"><img src="assets/icons/logros/trio.png"></span>
+          <div class="info">
+            <div class="name">juguemos Trio, ya me aburri</div>
+            <div class="desc">Acumula 5 victorias</div>
+          </div>
+          <span class="badge"><img src="assets/icons/lock.svg"></span>
+        </div>
+        <div class="achievement" data-ach="full-board">
+          <span class="icon"><img src="assets/icons/logros/siete.png"></span>
+          <div class="info">
+            <div class="name">Flip 7!!</div>
+            <div class="desc">Gana ocupando todo el tablero</div>
+          </div>
+          <span class="badge"><img src="assets/icons/lock.svg"></span>
+        </div>
+        <div class="achievement" data-ach="first-game">
+          <span class="icon"><img src="assets/icons/logros/yami-gato.png"></span>
+          <div class="info">
+            <div class="name">MIAUUUUU!!!</div>
+            <div class="desc">Completa tu primera partida</div>
+          </div>
+          <span class="badge"><img src="assets/icons/lock.svg"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+
+</div>
+
+<script src="assets/js/main.js"></script>
+</body>
+</html>
