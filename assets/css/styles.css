@@ -727,5 +727,13 @@
     .cell .vehicle-icon { width: 45%; height: 45%; }
     .player-info svg,
     .player-info .vehicle-icon { width: 25px; height: 25px; }
+
+    .modal-content { padding: 16px; width: 92%; }
+    .modal-header h2 { font-size: 1.1rem; }
+    .achievement { gap: 8px; padding: 8px; }
+    .achievement .info .name { font-size: 0.78rem; }
+    .achievement .info .desc { font-size: 0.68rem; }
+    .achievement .icon { width: 2rem; height: 2rem; flex-shrink: 0; }
+    .achievement .badge { flex-shrink: 0; }
   }
 
