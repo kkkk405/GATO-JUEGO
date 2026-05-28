@@ -429,6 +429,44 @@ function updateAchievementCount() {
   document.getElementById('ach-count').textContent = text;
   const modalCount = document.getElementById('ach-count-modal');
   if (modalCount) modalCount.textContent = text;
+  if (unlocked === total) showBirthdayPopup();
+}
+
+function showBirthdayPopup() {
+  if (document.getElementById('birthday-popup')) return;
+  const overlay = document.createElement('div');
+  overlay.id = 'birthday-popup';
+  overlay.className = 'birthday-overlay';
+  overlay.innerHTML = `
+    <div class="birthday-popup-content">
+      <div class="bday-fireworks"></div>
+      <div class="bday-yami">
+        <img src="assets/icons/logros/yami.png" alt="Yami">
+      </div>
+      <div class="bday-badge">29</div>
+      <h1 class="bday-title">¡Feliz Cumpleaños!</h1>
+      <h2 class="bday-name">Ignacio Cavieres</h2>
+      <p class="bday-desc">Yami te desea un feliz cumplea&ntilde;os 29</p>
+      <button class="btn btn-bday" onclick="closeBirthdayPopup()">
+        <img class="icon-svg" src="assets/icons/celebration.svg"> ¡Gracias!
+      </button>
+      <div class="bday-sparkles"></div>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+  setTimeout(() => overlay.classList.add('show'), 50);
+  startConfetti(true);
+  const bursts = setInterval(() => { startConfetti(true); }, 800);
+  overlay._bursts = setTimeout(() => clearInterval(bursts), 6000);
+}
+
+function closeBirthdayPopup() {
+  const popup = document.getElementById('birthday-popup');
+  if (popup) {
+    if (popup._bursts) clearTimeout(popup._bursts);
+    popup.classList.remove('show');
+    setTimeout(() => popup.remove(), 500);
+  }
 }
 
 function toggleAchievementsModal() {
@@ -474,7 +512,7 @@ function showNextToast() {
 let confettiPieces = [];
 let confettiRunning = false;
 
-function startConfetti() {
+function startConfetti(force) {
   const canvas = document.getElementById('confetti-canvas');
   const ctx = canvas.getContext('2d');
   canvas.width = window.innerWidth;
@@ -496,7 +534,7 @@ function startConfetti() {
     });
   }
 
-  if (!confettiRunning) {
+  if (force || !confettiRunning) {
     confettiRunning = true;
     animateConfetti(ctx, canvas);
   }
