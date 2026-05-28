@@ -541,15 +541,17 @@
     display: flex;
     align-items: center;
     gap: 10px;
-    white-space: nowrap;
+    max-width: 90vw;
+    width: max-content;
   }
-  .toast-icon { display: flex; align-items: center; }
+  .toast-icon { display: flex; align-items: center; flex-shrink: 0; }
   .toast-icon img,
   .toast-icon svg {
     width: 1.4rem;
     height: 1.4rem;
     display: block;
   }
+  .toast-text { word-break: break-word; }
   .toast.show {
     opacity: 1;
     transform: translateX(-50%) translateY(0);
@@ -735,5 +737,9 @@
     .achievement .info .desc { font-size: 0.68rem; }
     .achievement .icon { width: 2rem; height: 2rem; flex-shrink: 0; }
     .achievement .badge { flex-shrink: 0; }
+
+    .toast { padding: 10px 16px; font-size: 0.85rem; max-width: 92vw; gap: 8px; top: 20px; }
+    .toast-icon img,
+    .toast-icon svg { width: 1.2rem; height: 1.2rem; }
   }
 
