@@ -104,6 +104,9 @@
     text-shadow: none;
     letter-spacing: 1px;
   }
+  .birthday-header.game-header-compact { margin-bottom: 10px; }
+  .game-title { font-size: 1.5rem !important; }
+
   .birthday-header p {
     color: rgba(255,255,255,0.7);
     font-size: 0.95rem;

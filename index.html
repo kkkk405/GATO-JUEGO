@@ -3,6 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' fonts.googleapis.com; font-src 'self' fonts.gstatic.com; img-src 'self' data:; script-src 'self'; frame-ancestors 'none';">
+<meta name="referrer" content="no-referrer">
 <title>¡Gato de Cumpleaños!</title>
 <link rel="icon" type="image/png" href="assets/icons/moto-roja.png">
 <link rel="stylesheet" href="assets/css/styles.css">
@@ -64,7 +66,7 @@
       <h1> Gato sobre ruedas </h1>
       <p>El clásico juego del gato... ¡pero con vehículos!</p>
     </div>
-    <button class="btn btn-primary" onclick="showScreen('screen-select')"><img class="icon-svg" src="assets/icons/play.svg"> ¡Jugar!</button>
+    <button class="btn btn-primary" data-action="show-select"><img class="icon-svg" src="assets/icons/play.svg"> ¡Jugar!</button>
   </div>
 
   <!-- Screen 2: Vehicle & Color selection -->
@@ -75,11 +77,11 @@
 
     <div class="selection-title">Modo de juego:</div>
     <div class="mode-options">
-      <div class="mode-card selected" data-mode="1p" onclick="selectMode(this)">
+      <div class="mode-card selected" data-mode="1p">
         <span class="mode-icon"><img src="assets/icons/single-player.svg"></span>
         <span>1 Jugador</span>
       </div>
-      <div class="mode-card" data-mode="2p" onclick="selectMode(this)">
+      <div class="mode-card" data-mode="2p">
         <span class="mode-icon"><img src="assets/icons/multi-player.svg"></span>
         <span>2 Jugadores</span>
       </div>
@@ -87,11 +89,11 @@
 
     <div class="selection-title">Elige tu vehículo:</div>
     <div class="vehicle-options">
-      <div class="vehicle-card selected" data-vehicle="moto" onclick="selectVehicle(this)">
+      <div class="vehicle-card selected" data-vehicle="moto">
         <img class="vehicle-icon" src="assets/icons/moto-roja.png" alt="Moto">
         <span>Moto</span>
       </div>
-      <div class="vehicle-card" data-vehicle="auto" onclick="selectVehicle(this)">
+      <div class="vehicle-card" data-vehicle="auto">
         <img class="vehicle-icon" src="assets/icons/auto-rojo.png" alt="Auto">
         <span>Auto</span>
       </div>
@@ -103,13 +105,13 @@
       <div class="player-color-label" id="color-hint">Tú eliges primero</div>
     </div>
 
-    <button class="btn btn-primary" id="btn-start" onclick="startGame()" disabled>¡A jugar!</button>
+    <button class="btn btn-primary" id="btn-start" data-action="start-game" disabled>¡A jugar!</button>
   </div>
 
   <!-- Screen 3: Game -->
   <div class="screen" id="screen-game">
-    <div class="birthday-header" style="margin-bottom: 10px;">
-      <h1 style="font-size:1.5rem;"> Gato sobre ruedas</h1>
+    <div class="birthday-header game-header-compact">
+      <h1 class="game-title"> Gato sobre ruedas</h1>
     </div>
 
     <div class="game-header">
@@ -134,18 +136,18 @@
     <div class="board" id="board"></div>
 
     <div class="game-actions">
-      <button class="btn btn-secondary btn-small" id="btn-reset" onclick="resetBoard()"><img class="icon-svg" src="assets/icons/refresh.svg"> Reiniciar juego</button>
-      <button class="btn btn-secondary btn-small" onclick="backToMenu()"><img class="icon-svg" src="assets/icons/home.svg"> Menú principal</button>
-      <button class="btn btn-ghost btn-small" onclick="toggleAchievementsModal()"><img class="icon-svg" src="assets/icons/medal.svg"> Logros <span id="ach-count">(0/8)</span></button>
+      <button class="btn btn-secondary btn-small" id="btn-reset" data-action="reset-board"><img class="icon-svg" src="assets/icons/refresh.svg"> Reiniciar juego</button>
+      <button class="btn btn-secondary btn-small" data-action="back-to-menu"><img class="icon-svg" src="assets/icons/home.svg"> Menú principal</button>
+      <button class="btn btn-ghost btn-small" data-action="toggle-achievements"><img class="icon-svg" src="assets/icons/medal.svg"> Logros <span id="ach-count">(0/8)</span></button>
     </div>
   </div>
 
   <!-- Achievements Modal -->
-  <div class="modal-overlay" id="achievements-modal" onclick="closeAchievementsModal(event)">
-    <div class="modal-content" onclick="event.stopPropagation()">
+  <div class="modal-overlay" id="achievements-modal">
+    <div class="modal-content">
       <div class="modal-header">
         <h2><img class="icon-svg" src="assets/icons/medal.svg"> Logros <span id="ach-count-modal">(0/8)</span></h2>
-        <button class="modal-close" onclick="closeAchievementsModal()">&times;</button>
+        <button class="modal-close" data-action="close-achievements-modal">&times;</button>
       </div>
       <div class="achievements-panel" id="achievements-panel">
         <div class="achievement" data-ach="first-win">

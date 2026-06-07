@@ -1,14 +1,20 @@
-// === Icon paths ===
 const iconFiles = {
   moto: { '#FF4757': 'moto-roja', '#1a1a1a': 'moto-negra', '#4A90D9': 'moto-azul' },
   auto: { '#FF4757': 'auto-rojo', '#1a1a1a': 'auto-negro', '#4A90D9': 'auto-azul' }
 };
 
-function vehicleImg(vehicle, color) {
-  return `<img class="vehicle-icon" src="assets/icons/${iconFiles[vehicle][color]}.png" alt="${vehicle}">`;
+function escapeHTML(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
 }
 
-// === State ===
+function vehicleImg(vehicle, color) {
+  const fileName = iconFiles[vehicle] && iconFiles[vehicle][color];
+  if (!fileName) return '';
+  return `<img class="vehicle-icon" src="assets/icons/${escapeHTML(fileName)}.png" alt="${escapeHTML(vehicle)}">`;
+}
+
 const COLORS = ['#FF4757', '#1a1a1a', '#4A90D9'];
 let gameMode = '1p';
 let selectedVehicle = 'moto';
@@ -25,7 +31,7 @@ let scores = { 1: 0, 2: 0 };
 let streakCount = 0;
 let lastWinner = null;
 let movesInGame = 0;
-let achievements = {};
+let achievements = Object.create(null);
 let lastMoves = [];
 let opponentHadTwo = false;
 let totalWins = { 1: 0, 2: 0 };
@@ -33,13 +39,12 @@ let totalWins = { 1: 0, 2: 0 };
 const vehicleSvg = { moto: (c) => vehicleImg('moto', c), auto: (c) => vehicleImg('auto', c) };
 const vehicleNames = { moto: 'Moto', auto: 'Auto' };
 
-// === Screen management ===
 function showScreen(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
+  const el = document.getElementById(id);
+  if (el) el.classList.add('active');
 }
 
-// === Mode selection ===
 function selectMode(el) {
   document.querySelectorAll('.mode-card').forEach(c => c.classList.remove('selected'));
   el.classList.add('selected');
@@ -61,7 +66,6 @@ function resetColorSelection() {
   document.getElementById('btn-start').disabled = true;
 }
 
-// === Vehicle selection ===
 function selectVehicle(el) {
   document.querySelectorAll('.vehicle-card').forEach(c => c.classList.remove('selected'));
   el.classList.add('selected');
@@ -69,10 +73,9 @@ function selectVehicle(el) {
   renderColorOptions();
 }
 
-// === Color selection ===
 function renderColorOptions() {
   const container = document.getElementById('color-options');
-  container.innerHTML = '';
+  container.textContent = '';
   const usedColors = [p1Color, p2Color].filter(Boolean);
 
   COLORS.forEach(c => {
@@ -81,7 +84,6 @@ function renderColorOptions() {
     if (usedColors.includes(c)) swatch.classList.add('used');
     swatch.style.background = c;
     swatch.dataset.color = c;
-    swatch.onclick = () => selectColor(c);
     if (selectingFor === 1 && p1Color === c) swatch.classList.add('selected');
     if (selectingFor === 2 && p2Color === c) swatch.classList.add('selected');
     container.appendChild(swatch);
@@ -97,7 +99,7 @@ function renderColorOptions() {
     hint.textContent = p1Color ? 'Jugador 2 eligiendo...' : 'Tú eliges primero';
   } else {
     label.textContent = 'Jugador 2: elige tu color:';
-    hint.textContent = `Jugador 1 usa el color que elegiste`;
+    hint.textContent = 'Jugador 1 usa el color que elegiste';
   }
 
   document.getElementById('btn-start').disabled = !(p1Color && p2Color);
@@ -126,7 +128,6 @@ function selectColor(color) {
   }
 }
 
-// === Start game ===
 function startGame() {
   showScreen('screen-game');
   document.getElementById('p1-vehicle').innerHTML = vehicleSvg[selectedVehicle](p1Color);
@@ -151,10 +152,9 @@ function backToMenu() {
   resetBoard();
 }
 
-// === Board ===
 function renderBoard() {
   const boardEl = document.getElementById('board');
-  boardEl.innerHTML = '';
+  boardEl.textContent = '';
   board.forEach((cell, i) => {
     const div = document.createElement('div');
     div.className = 'cell' + (cell ? ' taken' : '') + (gameOver ? ' game-over' : '');
@@ -163,12 +163,12 @@ function renderBoard() {
       const color = cell === 1 ? p1Color : p2Color;
       div.innerHTML = vehicleSvg[selectedVehicle](color);
     }
-    div.onclick = () => makeMove(i);
     boardEl.appendChild(div);
   });
 }
 
 function makeMove(index, isAi) {
+  if (!Number.isInteger(index) || index < 0 || index > 8) return;
   if (board[index] || gameOver) return;
   if (gameMode === '1p' && currentPlayer === 2 && !isAi) return;
 
@@ -221,7 +221,6 @@ function getBestMove() {
     [0,4,8],[2,4,6]
   ];
 
-  // Win if possible
   for (const [a,b,c] of lines) {
     const cells = [board[a], board[b], board[c]];
     const aiCount = cells.filter(v => v === ai).length;
@@ -229,7 +228,6 @@ function getBestMove() {
     if (aiCount === 2 && empty.length === 1) return empty[0];
   }
 
-  // Block player win
   for (const [a,b,c] of lines) {
     const cells = [board[a], board[b], board[c]];
     const playerCount = cells.filter(v => v === player).length;
@@ -237,14 +235,11 @@ function getBestMove() {
     if (playerCount === 2 && empty.length === 1) return empty[0];
   }
 
-  // Take center
   if (board[4] === '') return 4;
 
-  // Take corners
   const corners = [0, 2, 6, 8].filter(i => board[i] === '');
   if (corners.length > 0) return corners[Math.floor(Math.random() * corners.length)];
 
-  // Take any available
   const available = board.map((v, i) => v === '' ? i : -1).filter(v => v !== -1);
   if (available.length > 0) return available[Math.floor(Math.random() * available.length)];
 
@@ -291,7 +286,6 @@ function handleWin(player, winLine) {
   }
   lastWinner = player;
 
-  // Highlight winning cells
   document.querySelectorAll('.cell').forEach((cell, i) => {
     if (winLine.includes(i)) cell.classList.add('win');
   });
@@ -302,17 +296,13 @@ function handleWin(player, winLine) {
   document.getElementById('turn-text').className = 'highlight';
   document.getElementById('result-text').style.display = 'none';
 
-  // Update scores
   document.getElementById('p1-score').textContent = scores[1];
   document.getElementById('p2-score').textContent = scores[2];
 
-  // Check achievements
   checkAchievements(player, winLine);
 
-  // Confetti
   startConfetti();
 
-  // Toast
   showToast(`¡${winnerName} gana!`);
 
   document.getElementById('btn-reset').innerHTML = '<img class="icon-svg" src="assets/icons/refresh.svg"> Siguiente ronda';
@@ -376,7 +366,6 @@ function updateTurnDisplay() {
   }
 }
 
-// === Achievements ===
 function checkAchievements(player, winLine) {
   if (!achievements['first-game']) unlockAchievement('first-game');
 
@@ -397,7 +386,7 @@ function unlockAchievement(id) {
   if (achievements[id]) return;
   achievements[id] = true;
 
-  const el = document.querySelector(`.achievement[data-ach="${id}"]`);
+  const el = document.querySelector(`.achievement[data-ach="${CSS.escape(id)}"]`);
   if (el) {
     el.classList.add('unlocked');
     const badgeImg = el.querySelector('.badge img');
@@ -418,7 +407,7 @@ function unlockAchievement(id) {
   };
 
   const iconEl = el?.querySelector('.icon img');
-  const iconSrc = iconEl ? iconEl.src : null;
+  const iconSrc = iconEl ? iconEl.getAttribute('src') : null;
   showToast(`${names[id] || id} desbloqueado!`, iconSrc);
 }
 
@@ -437,22 +426,58 @@ function showBirthdayPopup() {
   const overlay = document.createElement('div');
   overlay.id = 'birthday-popup';
   overlay.className = 'birthday-overlay';
-  overlay.innerHTML = `
-    <div class="birthday-popup-content">
-      <div class="bday-fireworks"></div>
-      <div class="bday-yami">
-        <img src="assets/icons/logros/yami.png" alt="Yami">
-      </div>
-      <div class="bday-badge">29</div>
-      <h1 class="bday-title">¡Feliz Cumpleaños!</h1>
-      <h2 class="bday-name">Ignacio Cavieres</h2>
-      <p class="bday-desc">Yami te desea un feliz cumplea&ntilde;os 29</p>
-      <button class="btn btn-bday" onclick="closeBirthdayPopup()">
-        <img class="icon-svg" src="assets/icons/celebration.svg"> ¡Gracias!
-      </button>
-      <div class="bday-sparkles"></div>
-    </div>
-  `;
+
+  const content = document.createElement('div');
+  content.className = 'birthday-popup-content';
+
+  const fireworks = document.createElement('div');
+  fireworks.className = 'bday-fireworks';
+  content.appendChild(fireworks);
+
+  const yami = document.createElement('div');
+  yami.className = 'bday-yami';
+  const yamiImg = document.createElement('img');
+  yamiImg.src = 'assets/icons/logros/yami.png';
+  yamiImg.alt = 'Yami';
+  yami.appendChild(yamiImg);
+  content.appendChild(yami);
+
+  const badge = document.createElement('div');
+  badge.className = 'bday-badge';
+  badge.textContent = '29';
+  content.appendChild(badge);
+
+  const h1 = document.createElement('h1');
+  h1.className = 'bday-title';
+  h1.textContent = '¡Feliz Cumpleaños!';
+  content.appendChild(h1);
+
+  const h2 = document.createElement('h2');
+  h2.className = 'bday-name';
+  h2.textContent = 'Ignacio Cavieres';
+  content.appendChild(h2);
+
+  const desc = document.createElement('p');
+  desc.className = 'bday-desc';
+  desc.textContent = 'Yami te desea un feliz cumpleaños 29';
+  content.appendChild(desc);
+
+  const btn = document.createElement('button');
+  btn.className = 'btn btn-bday';
+  btn.dataset.action = 'close-birthday-popup';
+  const btnIcon = document.createElement('img');
+  btnIcon.className = 'icon-svg';
+  btnIcon.src = 'assets/icons/celebration.svg';
+  btnIcon.alt = '';
+  btn.appendChild(btnIcon);
+  btn.appendChild(document.createTextNode(' ¡Gracias!'));
+  content.appendChild(btn);
+
+  const sparkles = document.createElement('div');
+  sparkles.className = 'bday-sparkles';
+  content.appendChild(sparkles);
+
+  overlay.appendChild(content);
   document.body.appendChild(overlay);
   setTimeout(() => overlay.classList.add('show'), 50);
   startConfetti(true);
@@ -474,12 +499,10 @@ function toggleAchievementsModal() {
   modal.classList.toggle('open');
 }
 
-function closeAchievementsModal(e) {
-  if (e && e.target !== e.currentTarget) return;
+function closeAchievementsModal() {
   document.getElementById('achievements-modal').classList.remove('open');
 }
 
-// === Toast ===
 let toastQueue = [];
 let toastShowing = false;
 
@@ -498,8 +521,18 @@ function showNextToast() {
   const toast = document.getElementById('toast');
   const toastText = document.getElementById('toast-text');
   const toastIcon = document.getElementById('toast-icon');
+
   toastText.textContent = msg;
-  toastIcon.innerHTML = iconSrc ? `<img src="${iconSrc}">` : '';
+
+  toastIcon.textContent = '';
+  if (iconSrc && typeof iconSrc === 'string') {
+    const img = document.createElement('img');
+    img.src = iconSrc;
+    img.alt = '';
+    img.loading = 'lazy';
+    toastIcon.appendChild(img);
+  }
+
   toast.classList.add('show');
   clearTimeout(toast._timeout);
   toast._timeout = setTimeout(() => {
@@ -508,13 +541,19 @@ function showNextToast() {
   }, 3000);
 }
 
-// === Confetti ===
 let confettiPieces = [];
 let confettiRunning = false;
 
 function startConfetti(force) {
   const canvas = document.getElementById('confetti-canvas');
-  const ctx = canvas.getContext('2d');
+  if (!canvas || !canvas.getContext) return;
+  let ctx;
+  try {
+    ctx = canvas.getContext('2d');
+  } catch (e) {
+    return;
+  }
+  if (!ctx) return;
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
 
@@ -568,18 +607,81 @@ function animateConfetti(ctx, canvas) {
   }
 }
 
-// === Init ===
-renderColorOptions();
-renderBoard();
+function init() {
+  document.addEventListener('click', function (e) {
+    const target = e.target.closest('[data-action]');
+    if (!target) return;
+    const action = target.dataset.action;
 
-window.addEventListener('resize', () => {
-  const canvas = document.getElementById('confetti-canvas');
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-});
+    switch (action) {
+      case 'show-select':
+        showScreen('screen-select');
+        break;
+      case 'start-game':
+        startGame();
+        break;
+      case 'reset-board':
+        resetBoard();
+        break;
+      case 'back-to-menu':
+        backToMenu();
+        break;
+      case 'toggle-achievements':
+        toggleAchievementsModal();
+        break;
+      case 'close-achievements-modal':
+        closeAchievementsModal();
+        break;
+      case 'close-birthday-popup':
+        closeBirthdayPopup();
+        break;
+    }
+  });
 
-document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape') {
-    document.getElementById('achievements-modal').classList.remove('open');
-  }
-});
+  document.querySelector('.mode-options').addEventListener('click', function (e) {
+    const card = e.target.closest('.mode-card');
+    if (card) selectMode(card);
+  });
+
+  document.querySelector('.vehicle-options').addEventListener('click', function (e) {
+    const card = e.target.closest('.vehicle-card');
+    if (card) selectVehicle(card);
+  });
+
+  document.getElementById('color-options').addEventListener('click', function (e) {
+    const swatch = e.target.closest('.color-swatch');
+    if (swatch && !swatch.classList.contains('used')) {
+      selectColor(swatch.dataset.color);
+    }
+  });
+
+  document.getElementById('achievements-modal').addEventListener('click', function (e) {
+    if (e.target === e.currentTarget) {
+      closeAchievementsModal();
+    }
+  });
+
+  document.getElementById('board').addEventListener('click', function (e) {
+    const cell = e.target.closest('.cell');
+    if (cell && !cell.classList.contains('taken') && !cell.classList.contains('game-over')) {
+      makeMove(parseInt(cell.dataset.index, 10));
+    }
+  });
+
+  renderColorOptions();
+  renderBoard();
+
+  window.addEventListener('resize', () => {
+    const canvas = document.getElementById('confetti-canvas');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      document.getElementById('achievements-modal').classList.remove('open');
+    }
+  });
+}
+
+document.addEventListener('DOMContentLoaded', init);
